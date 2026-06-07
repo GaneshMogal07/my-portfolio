@@ -84,7 +84,11 @@ Route::post('/contact', function (Illuminate\Http\Request $request) {
 
     Contact::create($validated);
 
-    Mail::to('mogalg71@gmail.com')->send(new ContactFormMail($validated));
+    try {
+        Mail::to('mogalg71@gmail.com')->send(new ContactFormMail($validated));
+    } catch (\Throwable $e) {
+        \Illuminate\Support\Facades\Log::error('Failed to send contact mail: ' . $e->getMessage());
+    }
 
     return response()->json(['status' => 'success', 'message' => 'Message sent successfully!']);
 });

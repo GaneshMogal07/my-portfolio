@@ -21,7 +21,7 @@ class ProfileController extends Controller
             'summary' => 'nullable|string',
             'image' => 'nullable|file|mimes:png,jpg,jpeg,webp|max:5120',
             'resume_pdf' => 'nullable|file|mimes:pdf|max:5120',
-            'resume_doc' => 'nullable|file|mimes:doc,docx|max:5120',
+            'resume_doc' => 'nullable|file|max:5120',
             'current_job_title' => 'nullable|string|max:255',
             'current_job_company' => 'nullable|string|max:255',
             'current_job_start_date' => 'nullable|date',
@@ -46,10 +46,17 @@ class ProfileController extends Controller
             $data['resume_pdf_path'] = $request->file('resume_pdf')->store('resume','public');
         }
         if ($request->hasFile('resume_doc')) {
+            $file = $request->file('resume_doc');
+            $ext = strtolower($file->getClientOriginalExtension());
+            if (!in_array($ext, ['doc', 'docx'])) {
+                return redirect()->back()
+                    ->withErrors(['resume_doc' => 'The resume word document must be a file of type: doc, docx.'])
+                    ->withInput();
+            }
             if ($profile->resume_doc_path) {
                 Storage::disk('public')->delete($profile->resume_doc_path);
             }
-            $data['resume_doc_path'] = $request->file('resume_doc')->store('resume','public');
+            $data['resume_doc_path'] = $file->store('resume','public');
         }
         $profile->update($data);
         return redirect()->route('admin.profile.edit')->with('status','Profile updated');
