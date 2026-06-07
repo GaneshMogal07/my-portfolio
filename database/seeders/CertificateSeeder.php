@@ -14,10 +14,17 @@ class CertificateSeeder extends Seeder
         $adminId = $admin?->id;
 
         $certs = [
+             [
+                'title' => 'AWS Certified Cloud Practitioner',
+                'level' => 'AWS Certified',
+                'file_path' => 'certificates/AWS.png',
+                'issue_date' => '2025-12-12',
+                'expires_at' => '2028-12-12',
+            ],
             [
                 'title' => 'C and C++',
                 'level' => 'Course',
-                'file_path' => 'certificates/c-and-cpp.png',
+                'file_path' => 'certificates/hC9j46aV5uQzABlXla3gqFCPsTu4tPNMnDzV96d9.jpg',
                 'issue_date' => '2022-03-01',
                 'expires_at' => null,
             ],
@@ -31,7 +38,7 @@ class CertificateSeeder extends Seeder
             [
                 'title' => 'TCS ION Career Edge - Young Professional',
                 'level' => 'Certification',
-                'file_path' => 'certificates/tcs-ion.pdf',
+                'file_path' => 'certificates/tcs-ion.png',
                 'issue_date' => '2023-01-01',
                 'expires_at' => null,
             ],
