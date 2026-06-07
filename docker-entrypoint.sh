@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# Run package discovery (since we disabled it in composer install build step)
+echo "Running package discovery..."
+php artisan package:discover --ansi
+
 # Cache configuration, routes, and views
 echo "Caching Laravel configuration..."
 php artisan config:cache

@@ -10,22 +10,19 @@ RUN npm run build
 FROM php:8.2-fpm-alpine
 WORKDIR /var/www/html
 
-# Install system dependencies & PHP extensions
+# Install system dependencies
 RUN apk add --no-cache \
     nginx \
     supervisor \
     curl \
-    libpng-dev \
-    libxml2-dev \
     zip \
     unzip \
     git \
-    oniguruma-dev \
-    libzip-dev \
-    postgresql-dev \
     bash
 
-RUN docker-php-ext-install pdo_mysql pdo_pgsql bcmath mbstring zip gd opcache xml
+# Install PHP extensions using the official PHP extension installer
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions pdo_mysql pdo_pgsql bcmath mbstring zip gd opcache xml
 
 # Copy Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -40,9 +37,9 @@ COPY --from=assets-builder /app/public/build ./public/build
 RUN mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache storage/logs bootstrap/cache \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Run composer installation
+# Run composer installation (disabling scripts to avoid build-time database connection errors)
 ENV COMPOSER_ALLOW_SUPERUSER=1
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --no-scripts --optimize-autoloader
 
 # Nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
