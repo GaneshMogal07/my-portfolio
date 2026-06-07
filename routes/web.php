@@ -71,6 +71,8 @@ Route::get('/download_resume_word', function () {
 
 use App\Mail\ContactFormMail;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Contact;
+use App\Models\Feedback;
 
 Route::post('/contact', function (Illuminate\Http\Request $request) {
     $validated = $request->validate([
@@ -85,6 +87,21 @@ Route::post('/contact', function (Illuminate\Http\Request $request) {
     Mail::to('mogalg71@gmail.com')->send(new ContactFormMail($validated));
 
     return response()->json(['status' => 'success', 'message' => 'Message sent successfully!']);
+});
+
+Route::post('/feedback', function (Illuminate\Http\Request $request) {
+    $validated = $request->validate([
+        'employee_name' => 'required|string|max:255',
+        'company' => 'nullable|string|max:255',
+        'feedback' => 'required|string',
+        'rating' => 'required|integer|min:1|max:5',
+    ]);
+
+    $validated['is_featured'] = false;
+
+    Feedback::create($validated);
+
+    return response()->json(['status' => 'success', 'message' => 'Thank you for your feedback!']);
 });
 
 Route::get('/api/certifications', function () {

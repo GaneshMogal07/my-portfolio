@@ -69,6 +69,62 @@
                     if (btn) btn.click();
                 });
             }
+
+            // Handle Contact Form
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const formMessage = document.getElementById('form-message');
+                    formMessage.innerHTML = '';
+                    const formData = new FormData(contactForm);
+                    
+                    fetch('/contact', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        formMessage.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+                        contactForm.reset();
+                    })
+                    .catch(error => {
+                        formMessage.innerHTML = `<div class="alert alert-danger">Something went wrong. Please try again.</div>`;
+                    });
+                });
+            }
+
+            // Handle Feedback Form
+            const feedbackForm = document.getElementById('user-feedback-form');
+            if (feedbackForm) {
+                feedbackForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const formMessage = document.getElementById('feedback-form-message');
+                    formMessage.innerHTML = '';
+                    const formData = new FormData(feedbackForm);
+                    
+                    fetch('/feedback', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        formMessage.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+                        feedbackForm.reset();
+                    })
+                    .catch(error => {
+                        formMessage.innerHTML = `<div class="alert alert-danger">Something went wrong. Please try again.</div>`;
+                    });
+                });
+            }
         });
     </script>
 </body>

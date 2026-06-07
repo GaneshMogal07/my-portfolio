@@ -315,11 +315,43 @@
     </div>
 </section>
 
-<section id="contact" class="py-5 bg-light">
+<section id="feedback-form-section" class="py-5 bg-light">
+    <div class="container">
+        <div class="contact-form shadow-lg mx-auto" style="max-width: 600px;">
+            <h2 class="section-title text-center h4 mb-4">Share Your Feedback</h2>
+            <form id="user-feedback-form" action="/feedback" method="POST">
+                @csrf
+                <div class="mb-3">
+                    <input type="text" name="employee_name" class="form-control" placeholder="Your Name" required>
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="company" class="form-control" placeholder="Your Company (Optional)">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Rating</label>
+                    <div class="d-flex gap-2">
+                        @for($i = 1; $i <= 5; $i++)
+                            <input type="radio" name="rating" value="{{ $i }}" id="rating-{{ $i }}" class="btn-check" required>
+                            <label class="btn btn-outline-primary" for="rating-{{ $i }}">{{ $i }} Star{{ $i > 1 ? 's' : '' }}</label>
+                        @endfor
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <textarea name="feedback" class="form-control" rows="4" placeholder="Your Feedback" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Submit Feedback</button>
+                <div id="feedback-form-message" class="mt-3"></div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="py-5">
     <div class="container">
         <div class="contact-form shadow-lg mx-auto" style="max-width: 600px;">
             <h2 class="section-title text-center h4 mb-4">Contact Me</h2>
             <form id="contact-form" action="/contact" method="POST">
+                @csrf
                 <div class="mb-3">
                     <input type="text" name="name" class="form-control" placeholder="Your Name" required>
                 </div>

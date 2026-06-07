@@ -1,0 +1,88 @@
+name: Deploy to Google Cloud Run & Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to main branch
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # 1. Authenticate to Google Cloud
+    - name: Authenticate to Google Cloud
+      id: auth
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    # 2. Set up Google Cloud SDK
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+    # 3. Configure Docker to use gcloud command-line tool as credential helper
+    - name: Configure Docker
+      run: |
+        gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+    # 4. Create Artifact Registry repository if it doesn't exist
+    - name: Ensure Artifact Registry Repo Exists
+      run: |
+        gcloud artifacts repositories describe portfolio-repo --location=us-central1 || \
+        gcloud artifacts repositories create portfolio-repo \
+          --repository-format=docker \
+          --location=us-central1 \
+          --description="Docker repository for portfolio app"
+
+    # 5. Build and Push Docker image
+    - name: Build & Push Docker Image
+      run: |
+        IMAGE_NAME="us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-repo/portfolio-app:latest"
+        docker build -t $IMAGE_NAME .
+        docker push $IMAGE_NAME
+
+    # 6. Deploy to Google Cloud Run
+    - name: Deploy to Cloud Run
+      id: deploy-cloud-run
+      uses: google-github-actions/deploy-cloudrun@v2
+      with:
+        service: portfolio-app
+        image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/portfolio-repo/portfolio-app:latest
+        region: us-central1
+        flags: '--allow-unauthenticated'
+        env_vars: |
+          APP_ENV=production
+          APP_KEY=${{ secrets.APP_KEY }}
+          APP_URL=https://portfolio-app-v2jnvszrga-uc.a.run.app  # Will be replaced with final Firebase URL or Cloud Run URL
+          DB_CONNECTION=mysql
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_PORT=${{ secrets.DB_PORT }}
+          DB_DATABASE=${{ secrets.DB_DATABASE }}
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          RUN_MIGRATIONS=true
+          MAIL_MAILER=smtp
+          MAIL_HOST=${{ secrets.MAIL_HOST }}
+          MAIL_PORT=${{ secrets.MAIL_PORT }}
+          MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
+          MAIL_ENCRYPTION=tls
+          MAIL_FROM_ADDRESS=${{ secrets.MAIL_FROM_ADDRESS }}
+          MAIL_FROM_NAME=${{ secrets.MAIL_FROM_NAME }}
+
+    # 7. Deploy to Firebase Hosting
+    # Uses Service Account credentials (which must have Firebase Hosting Admin and API permissions)
+    - name: Deploy to Firebase Hosting
+      uses: FirebaseExtended/action-hosting-deploy@v0
+      with:
+        repoToken: ${{ secrets.GITHUB_TOKEN }}
+        firebaseServiceAccount: ${{ secrets.GCP_SA_KEY }}
+        projectId: ${{ secrets.GCP_PROJECT_ID }}
+        channelId: live
