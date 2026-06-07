@@ -138,3 +138,66 @@
         border: 1px solid rgba(56, 189, 248, 0.2);
     }
 }
+
+/* Fix Bootstrap Collapse visibility conflict with Tailwind CSS */
+.collapse:not(.show) {
+    display: none !important;
+}
+
+.collapse {
+    visibility: visible !important;
+}
+
+.navbar-collapse.collapse {
+    visibility: visible !important;
+}
+
+@media (max-width: 768px) {
+    .navbar-collapse {
+        background-color: rgba(33, 37, 41, 0.98) !important; /* Solid dark background for mobile dropdown */
+        padding: 1.25rem !important;
+        border-radius: 8px !important;
+        margin-top: 0.5rem !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    .navbar-nav {
+        margin-bottom: 1rem;
+    }
+    .navbar-nav .nav-link {
+        padding: 0.5rem 0 !important;
+    }
+}
+
+/* Responsive Timeline for Education Section */
+.education-section {
+    position: relative;
+    padding-left: 30px;
+    border-left: 3px solid #3b82f6;
+    margin-left: 15px;
+    margin-top: 1.5rem;
+}
+
+.education-card {
+    position: relative;
+    padding: 1.25rem !important;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
+    border: 1px solid #e5e7eb;
+}
+
+.education-card::before {
+    content: '';
+    position: absolute;
+    left: -39px; /* Centered precisely on the vertical timeline line */
+    top: 24px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #3b82f6;
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    z-index: 2;
+}
+

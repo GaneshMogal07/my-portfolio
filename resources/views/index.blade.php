@@ -14,7 +14,7 @@
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark shadow-sm">
         <div class="container-fluid px-4">
             <a class="navbar-brand d-flex align-items-center mb-0" href="{{ url('/') }}">
-                <span class="d-none d-sm-inline">Ganesh Mogal</span>
+                <span>Ganesh Mogal</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -29,7 +29,7 @@
                     <li class="nav-item"><a class="nav-link small" href="#feedback">Feedback</a></li>
                     <li class="nav-item"><a class="nav-link small" href="#contact">Contact Me</a></li>
                 </ul>
-                <div class="d-flex gap-2 align-items-center ms-lg-3">
+                <div class="d-flex flex-wrap gap-2 align-items-center mt-3 mt-md-0 ms-md-3">
                     <a href="{{ route('download_resume_pdf') }}" class="btn btn-outline-light btn-sm"><i class="fas fa-file-pdf me-1"></i>PDF</a>
                     <a href="{{ route('download_resume_word') }}" class="btn btn-outline-light btn-sm"><i class="fas fa-file-word me-1"></i>Word</a>
                     @if(Session::has('admin_id'))
