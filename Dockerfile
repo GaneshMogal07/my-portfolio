@@ -22,9 +22,10 @@ RUN apk add --no-cache \
     git \
     oniguruma-dev \
     libzip-dev \
+    postgresql-dev \
     bash
 
-RUN docker-php-ext-install pdo_mysql bcmath mbstring zip gd opcache xml
+RUN docker-php-ext-install pdo_mysql pdo_pgsql bcmath mbstring zip gd opcache xml
 
 # Copy Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
