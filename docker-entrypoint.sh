@@ -15,10 +15,10 @@ php artisan view:cache
 echo "Creating storage symlink..."
 php artisan storage:link --force
 
-# Run database migrations in production
+# Run database migrations and seeders in production
 if [ "$RUN_MIGRATIONS" = "true" ]; then
-    echo "Running database migrations..."
-    php artisan migrate --force
+    echo "Running database migrations and seeding..."
+    php artisan migrate --seed --force
 fi
 
 # Start Supervisor to run PHP-FPM & Nginx
