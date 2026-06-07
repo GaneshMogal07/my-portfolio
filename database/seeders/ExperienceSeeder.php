@@ -18,7 +18,7 @@ class ExperienceSeeder extends Seeder
                 'title' => 'Junior Software Developer',
                 'company' => 'TH Systems Pvt Ltd',
                 'location' => 'Pune, Maharashtra',
-                'start_date' => '2024-10-01',
+                'start_date' => '2024-10-14',
                 'end_date' => null,
                 'description' => 'Developed HRMS and HIMS using Angular (web) and Ionic (mobile). Backend with Laravel and MySQL; handled SQL Server data ops; hands-on with AWS, Docker, GitHub.',
             ],

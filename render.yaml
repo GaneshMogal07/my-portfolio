@@ -57,3 +57,5 @@ services:
         value: mogalg71@gmail.com
       - key: MAIL_FROM_NAME
         value: "Ganesh Mogal"
+      - key: MAIL_VERIFY_PEER
+        value: "false"
