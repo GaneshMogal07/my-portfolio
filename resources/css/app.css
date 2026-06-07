@@ -140,8 +140,10 @@
 }
 
 /* Fix Bootstrap Collapse visibility conflict with Tailwind CSS */
-.collapse:not(.show) {
-    display: none !important;
+@media (max-width: 767.98px) {
+    .collapse:not(.show) {
+        display: none !important;
+    }
 }
 
 .collapse {
@@ -187,7 +189,8 @@
     border: 1px solid #e5e7eb;
 }
 
-.education-card::before {
+/* Limit the timeline dots ONLY to the education timeline section */
+.education-section .education-card::before {
     content: '';
     position: absolute;
     left: -39px; /* Centered precisely on the vertical timeline line */

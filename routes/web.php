@@ -21,7 +21,7 @@ Route::get('/', function () {
     $educations = \App\Models\Education::orderBy('start_date','desc')->get();
     $experiences = \App\Models\Experience::orderBy('start_date','desc')->get();
     $certs = Certificate::latest()->get();
-    $feedbacks = \App\Models\Feedback::where('is_featured', true)->latest()->take(5)->get();
+    $feedbacks = \App\Models\Feedback::latest()->take(10)->get();
     return view('index', compact('profile','skills','projects','educations','experiences','certs', 'feedbacks'));
 });
 
@@ -97,7 +97,7 @@ Route::post('/feedback', function (Illuminate\Http\Request $request) {
         'rating' => 'required|integer|min:1|max:5',
     ]);
 
-    $validated['is_featured'] = false;
+    $validated['is_featured'] = true;
 
     Feedback::create($validated);
 

@@ -38,7 +38,6 @@ class DatabaseSeeder extends Seeder
             CertificateSeeder::class,
             ExperienceSeeder::class,
             EducationSeeder::class,
-            FeedbackSeeder::class,
         ]);
     }
 }
