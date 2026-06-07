@@ -76,7 +76,7 @@
                 contactForm.addEventListener('submit', function(e) {
                     e.preventDefault();
                     const formMessage = document.getElementById('form-message');
-                    formMessage.innerHTML = '';
+                    formMessage.innerHTML = '<div class="alert alert-info">Sending message...</div>';
                     const formData = new FormData(contactForm);
                     
                     fetch('/contact', {
@@ -87,13 +87,24 @@
                         },
                         body: formData
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        const contentType = response.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            return response.json().then(data => {
+                                if (!response.ok) {
+                                    throw new Error(data.message || 'Something went wrong.');
+                                }
+                                return data;
+                            });
+                        }
+                        throw new Error('Server returned an invalid response. Please try again.');
+                    })
                     .then(data => {
                         formMessage.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
                         contactForm.reset();
                     })
                     .catch(error => {
-                        formMessage.innerHTML = `<div class="alert alert-danger">Something went wrong. Please try again.</div>`;
+                        formMessage.innerHTML = `<div class="alert alert-danger">${error.message || 'Something went wrong. Please try again.'}</div>`;
                     });
                 });
             }
@@ -104,7 +115,7 @@
                 feedbackForm.addEventListener('submit', function(e) {
                     e.preventDefault();
                     const formMessage = document.getElementById('feedback-form-message');
-                    formMessage.innerHTML = '';
+                    formMessage.innerHTML = '<div class="alert alert-info">Submitting feedback...</div>';
                     const formData = new FormData(feedbackForm);
                     
                     fetch('/feedback', {
@@ -115,13 +126,24 @@
                         },
                         body: formData
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        const contentType = response.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            return response.json().then(data => {
+                                if (!response.ok) {
+                                    throw new Error(data.message || 'Something went wrong.');
+                                }
+                                return data;
+                            });
+                        }
+                        throw new Error('Server returned an invalid response. Please try again.');
+                    })
                     .then(data => {
                         formMessage.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
                         feedbackForm.reset();
                     })
                     .catch(error => {
-                        formMessage.innerHTML = `<div class="alert alert-danger">Something went wrong. Please try again.</div>`;
+                        formMessage.innerHTML = `<div class="alert alert-danger">${error.message || 'Something went wrong. Please try again.'}</div>`;
                     });
                 });
             }

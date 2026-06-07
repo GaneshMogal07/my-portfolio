@@ -5,8 +5,8 @@
                 <img src="{{ isset($profile) && $profile->image_path ? asset('storage/'.$profile->image_path) : url('/static/images/profile.jpg') }}" alt="Ganesh Mogal" class="img-fluid rounded-circle mb-4" style="width: 250px; height: 250px; object-fit: cover;">
             </div>
             <div class="col-md-8">
-                <h1 class="display-4">Hi, I'm Ganesh Mogal</h1>
-                <p class="lead">B.E in Computer Engineering</p>
+                <h1 class="display-4 text-center">Hi, I'm Ganesh Mogal</h1>
+                <p class="lead text-center">B.E in Computer Engineering</p>
                 <div class="text-center my-3">
                     <p class="lead mb-1">
                         <i class="fas fa-briefcase text-primary me-2"></i>
@@ -95,9 +95,9 @@
                 <div class="mt-4">
                     <h3>Resume</h3>
                     <div class="resume-update">
-                        <div class="d-flex gap-2 mb-3">
-                            <a href="{{ route('download_resume_pdf') }}" class="btn btn-primary"><i class="fas fa-file-pdf me-2"></i>PDF Version</a>
-                            <a href="{{ route('download_resume_word') }}" class="btn btn-secondary"><i class="fas fa-file-word me-2"></i>Word Version</a>
+                        <div class="d-flex flex-column flex-sm-row gap-2 mb-3">
+                            <a href="{{ route('download_resume_pdf') }}" class="btn btn-primary w-100 w-sm-auto"><i class="fas fa-file-pdf me-2"></i>PDF Version</a>
+                            <a href="{{ route('download_resume_word') }}" class="btn btn-secondary w-100 w-sm-auto"><i class="fas fa-file-word me-2"></i>Word Version</a>
                         </div>
                         <div class="resume-status">
                             <p class="text-muted"><i class="fas fa-clock me-2"></i>Last updated: <span id="resume-update-date">January 2026</span></p>
@@ -329,7 +329,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Rating</label>
-                    <div class="d-flex gap-2">
+                    <div class="d-flex flex-wrap gap-2">
                         @for($i = 1; $i <= 5; $i++)
                             <input type="radio" name="rating" value="{{ $i }}" id="rating-{{ $i }}" class="btn-check" required>
                             <label class="btn btn-outline-primary" for="rating-{{ $i }}">{{ $i }} Star{{ $i > 1 ? 's' : '' }}</label>
