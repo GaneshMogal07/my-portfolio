@@ -1,0 +1,1 @@
+import os\nfrom app import app\n\nif __name__ == "__main__":\n    port = int(os.getenv("PORT", 8000))\n    app.run(host="0.0.0.0", port=port)\n\n# WSGI application callable for servers expecting `application`\napplication = app\n
